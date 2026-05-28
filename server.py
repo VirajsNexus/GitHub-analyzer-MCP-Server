@@ -11,7 +11,6 @@ def hello(name: str) -> str:
 @app.tool()
 def analyze_repo(repo_url):
 
-    # list आला तर string मध्ये convert
     if isinstance(repo_url, list):
         repo_url = repo_url[0]
 
@@ -62,6 +61,33 @@ def check_readme(repo_url):
         "default_branch": data["default_branch"]
     }
 
+@app.tool()
+def get_language(repo_url):
+    if isinstance(repo_url, list):
+        repo_url = repo_url[0]
+
+    parts = repo_url.rstrip("/").split("/")
+
+    owner = parts[-2]
+    repo = parts[-1]
+
+    api_url = f"https://api.github.com/repos/{owner}/{repo}/languages"
+
+    response = requests.get(api_url)
+
+    if response.status_code != 200:
+        return {"error": "Could not fetch languages"}
+
+    data = response.json()
+
+    total_bytes = sum(data.values())
+
+    percentages = {}
+
+    for language, bytes_used in data.items():
+        percentages[language] = round((bytes_used / total_bytes) * 100, 2)
+
+    return percentages
 
 if __name__ == "__main__":
     app.run()
