@@ -1,0 +1,42 @@
+from mcp.server.fastmcp import FastMCP
+import requests
+
+app = FastMCP("GitHub Analyzer")
+
+@app.tool()
+def hello(name: str) -> str:
+    return f"Hello, {name}!"
+
+
+@app.tool()
+def analyze_repo(repo_url):
+
+    # list आला तर string मध्ये convert
+    if isinstance(repo_url, list):
+        repo_url = repo_url[0]
+
+    parts = repo_url.rstrip("/").split("/")
+
+    owner = parts[-2]
+    repo = parts[-1]
+
+    api_url = f"https://api.github.com/repos/{owner}/{repo}"
+
+    response = requests.get(api_url)
+
+    if response.status_code != 200:
+        return {"error": "Repository not found"}
+
+    data = response.json()
+
+    return {
+        "name": data["name"],
+        "owner": data["owner"]["login"],
+        "stars": data["stargazers_count"],
+        "forks": data["forks_count"],
+        "language": data["language"]
+    }
+
+
+if __name__ == "__main__":
+    app.run()

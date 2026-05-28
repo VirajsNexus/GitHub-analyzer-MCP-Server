@@ -1,0 +1,48 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+.env/
+.venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+
+# MCP / Temporary Files
+*.tmp
+temp/
+cache/
+
+# Python Testing
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# SQLite
+*.sqlite3
+
+# Coverage reports
+htmlcov/
+.coverage
