@@ -37,6 +37,31 @@ def analyze_repo(repo_url):
         "language": data["language"]
     }
 
+@app.tool()
+def check_readme(repo_url):
+
+    if isinstance(repo_url, list):
+        repo_url = repo_url[0]
+
+    parts = repo_url.rstrip("/").split("/")
+    owner = parts[-2]
+    repo = parts[-1]
+
+    api_url = f"https://api.github.com/repos/{owner}/{repo}"
+
+    response = requests.get(api_url)
+
+    if response.status_code != 200:
+        return {"error": "Repository not found"}
+
+    data = response.json()
+
+    return {
+        "has_description": bool(data["description"]),
+        "has_license": bool(data["license"]),
+        "default_branch": data["default_branch"]
+    }
+
 
 if __name__ == "__main__":
     app.run()
