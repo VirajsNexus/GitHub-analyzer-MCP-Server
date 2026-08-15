@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GitHub Analyzer</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+
+        body{
+            background: linear-gradient(to right,#141e30,#243b55);
+
+            min-height: 100vh;
+
+            color: white;
+        }
+
+        .glass{
+
+            background: rgba(255,255,255,0.1);
+
+            backdrop-filter: blur(10px);
+
+            border-radius: 20px;
+
+            padding: 30px;
+
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .repo-card{
+
+            background: rgba(255,255,255,0.08);
+
+            border-radius: 20px;
+
+            padding: 20px;
+
+            margin-top: 20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container py-5">
+
+        <div class="glass">
+
+            <h1 class="text-center mb-4">
+
+                GitHub Analyzer 
+
+            </h1>
+
+            <form action="/analyze"
+                  method="post">
+
+                <div class="mb-3">
+
+                    <input
+                        type="text"
+
+                        name="repo_url"
+
+                        class="form-control form-control-lg"
+
+                        placeholder="Enter GitHub Repository URL"
+
+                        required>
+
+                </div>
+
+                <div class="d-grid">
+
+                    <button class="btn btn-primary btn-lg">
+
+                        Analyze Repository
+
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            {% if error %}
+
+            <div class="alert alert-danger mt-4">
+
+                {{ error }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            {% if repo %}
+
+            <div class="repo-card">
+
+                <h2>
+
+                    {{ repo.name }}
+
+                </h2>
+
+                <p>
+
+                    {{ repo.description }}
+
+                </p>
+
+                <div class="row text-center mt-4">
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="card bg-dark text-light p-3">
+
+                            <h4> Stars</h4>
+
+                            <h3>{{ repo.stars }}</h3>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="card bg-dark text-light p-3">
+
+                            <h4> Forks</h4>
+
+                            <h3>{{ repo.forks }}</h3>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="card bg-dark text-light p-3">
+
+                            <h4> Watchers</h4>
+
+                            <h3>{{ repo.watchers }}</h3>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="card bg-dark text-light p-3">
+
+                            <h4> Issues</h4>
+
+                            <h3>{{ repo.issues }}</h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-4">
+
+                    <h4>
+
+                        Primary Language
+
+                    </h4>
+
+                    <span class="badge bg-success fs-6">
+
+                        {{ repo.language }}
+
+                    </span>
+
+                </div>
+
+
+                <div class="mt-4">
+
+                    <h4>
+
+                        Languages Used
+
+                    </h4>
+
+                    <ul class="list-group">
+
+                        {% for lang, value in repo.languages.items() %}
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                            {{ lang }}
+
+                            <span class="badge bg-primary rounded-pill">
+
+                                {{ value }} bytes
+
+                            </span>
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+
+                <div class="mt-4 d-grid">
+
+                    <a href="/report/{{ repo.owner }}/{{ repo.name }}"
+                       class="btn btn-danger btn-lg">
+
+                        Download PDF Report 
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
